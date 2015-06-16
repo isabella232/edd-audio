@@ -5,7 +5,7 @@ Plugin URI: http://easydigitaldownloads.com/extension/audio-player
 Description: Adds an audio player for previewing music tracks to your download details page
 Author: Pippin Williamson
 Author URI: http://pippinsplugins.com
-Version: 1.3.4
+Version: 1.4
 */
 
 // plugin folder url
@@ -15,7 +15,7 @@ if(!defined('EDD_AP_PLUGIN_URL')) {
 
 define( 'EDD_AP_STORE_API_URL', 'http://easydigitaldownloads.com' );
 define( 'EDD_AP_PRODUCT_NAME', 'Audio Player' );
-define( 'EDD_AP_VERSION', '1.3.4' );
+define( 'EDD_AP_VERSION', '1.4' );
 
 if( class_exists( 'EDD_License' ) ) {
 	$edd_ap_license = new EDD_License( __FILE__, EDD_AP_PRODUCT_NAME, EDD_AP_VERSION, 'Pippin Williamson', 'edd_ap_license_key' );
@@ -377,3 +377,128 @@ function edd_ap_update_file_order() {
 	die();
 }
 add_action('wp_ajax_edd_update_audio_files_order', 'edd_ap_update_file_order');
+
+// Begin FES integration
+// add button to the post button listing
+add_action('fes_custom_post_button', 'edd_ap_custom_post_button');
+function edd_ap_custom_post_button( $title ){
+	echo  '<button class="fes-button button" data-name="edd_ap" data-type="action" title="' . $title . '">'. __('Audio Player', 'edd_ap') . '</button>';
+}
+
+add_action( 'fes_admin_field_edd_ap', 'fes_admin_field_save', 10, 3);
+function fes_admin_field_save( $field_id, $label = "", $values = array() ){
+		if( !isset( $values['label'] ) ){
+			$values['label'] = __('Audio Player', 'edd_ap');
+		}
+
+		$values['no_css'] = true;
+		$values['is_meta'] = true;
+		$values['name'] = 'edd_ap';
+        ?>
+        <li class="edd_ap">
+            <?php FES_Formbuilder_Templates::legend( $values['label'] ); ?>
+            <?php FES_Formbuilder_Templates::hidden_field( "[$field_id][input_type]", 'edd_ap' ); ?>
+            <?php FES_Formbuilder_Templates::hidden_field( "[$field_id][template]", 'edd_ap' ); ?>
+
+            <div class="fes-form-holder">
+                <?php FES_Formbuilder_Templates::common( $field_id, 'edd_ap', false, $values ); ?>
+            </div> <!-- .fes-form-holder -->
+        </li>
+        <?php
+}
+
+add_filter('fes_formbuilder_custom_field', 'edd_ap_formbuilder_is_custom_field', 10, 2);
+
+function edd_ap_formbuilder_is_custom_field( $bool, $template_field ){
+	if ( $bool ){
+		return $bool;
+	}
+	else if ( isset( $template_field['template'] ) && $template_field['template'] == 'edd_ap' ){
+		return true;
+	}
+	else{
+		return $bool;
+	}
+}
+
+add_action( 'fes_submission_form_save_custom_fields', 'edd_ap_save_custom_fields' );
+function edd_ap_save_custom_fields( $post_id ){
+	if ( isset( $_POST ['edd_ap'] ) ){
+		$files = $_POST ['edd_ap'];
+		$names = isset( $_POST['edd_ap']['name']) ? $_POST['edd_ap']['name'] : array();
+		unset($files['name']);
+		$pairs = array();
+		$counter = 0;
+		foreach( $files as $file => $url ){
+			$pairs[$counter]['file'] = $url;
+			$pairs[$counter]['name'] = isset( $names[$counter] ) ? $names[$counter] : "";
+			$counter++;
+		}
+		if ( count( $pairs) > 0 ){
+			update_post_meta( $post_id, 'edd_preview_files', $pairs );
+			update_post_meta( $post_id, '_edd_show_audio_player', true);
+			$style = apply_filters( 'edd_ap_default_player', 'premium_pixels');
+			update_post_meta( $post_id, '_edd_ap_theme', $style );
+		}
+	}
+}
+
+add_action('fes_render_field_edd_ap', 'edd_ap_file_upload', 10, 3 );
+function edd_ap_file_upload( $attr, $post_id, $type ) {
+		$empty_arr = array();
+		$empty_arr[0]['file'] = '';
+		$empty_arr[0]['name'] = '';
+		$files = $post_id != false ? get_post_meta( $post_id, 'edd_preview_files', true ) : $empty_arr;
+?>
+        <div class="fes-fields">
+			<table class="<?php echo sanitize_key($attr['name']); ?>">
+				<thead>
+					<tr>
+						<td class="fes-edd-ap">
+							<?php _e( 'Audio File Name', 'edd_ap' ); ?>
+						</td>
+						<td class="fes-file-column" colspan="2"><?php _e( 'File URL', 'edd_fes' ); ?></td>
+						<td class="fes-remove-column">&nbsp;</td>
+					</tr>
+				</thead>
+				<tbody class="fes-variations-list-<?php echo sanitize_key($attr['name']); ?>">
+			<?php
+          	
+			foreach ( $files as $key => $val ) {
+				$name = isset( $val['name'] ) ? $val['name'] : '';
+				$url =  isset( $val['file'] ) ? $val['file'] : '';
+				$index = $key;
+				?>
+				<tr class="fes-single-variation">
+					<td class="fes-name-row">
+						<input type="text" class="fes-file-name" name="<?php echo $attr['name']; ?>[name][<?php echo esc_attr( $index ); ?>]" value="<?php echo esc_attr( $name ); ?>" />
+					</td>
+					<td class="fes-url-row">
+						<?php printf( '<span class="fes-file-validation" data-required="%s" data-type="file"></span>', $attr['required'] ); ?>
+						<input type="text" class="fes-file-value" placeholder="<?php _e( "http://", 'edd_fes' ); ?>" name="<?php echo $attr['name']; ?>[<?php echo esc_attr( $index ); ?>]" value="<?php echo esc_attr( $url ); ?>" />
+					</td>
+					<td class="fes-url-choose-row" width="1%">
+						<a href="#" class="btn btn-sm btn-default upload_file_button" data-choose="<?php _e( 'Choose file', 'edd_fes' ); ?>" data-update="<?php _e( 'Insert file URL', 'edd_fes' ); ?>">
+						<?php echo str_replace( ' ', '&nbsp;', __( 'Choose file', 'edd_fes' ) ); ?></a>
+					</td>
+					<td width="1%" class="fes-delete-row">
+						<a href="#" class="btn btn-sm btn-danger delete">
+						<?php _e( 'x', 'edd_fes' ); ?></a>
+					</td>
+				</tr>
+				<?php
+			}
+			?>
+					<tr class="add_new" style="display:none !important;" id="<?php echo sanitize_key($attr['name']); ?>"></tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<th colspan="5">
+							<a href="#" class="insert-file-row" id="<?php echo sanitize_key($attr['name']); ?>"><?php _e( 'Add File', 'edd_fes' ); ?></a>
+						</th>
+					</tr>
+				</tfoot>
+		</table>
+       </div> <!-- .fes-fields -->
+        <?php
+	}
