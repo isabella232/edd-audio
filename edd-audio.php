@@ -437,7 +437,7 @@ function edd_ap_save_custom_fields( $post_id ){
 		if ( count( $pairs) > 0 ){
 			update_post_meta( $post_id, 'edd_preview_files', $pairs );
 			update_post_meta( $post_id, '_edd_show_audio_player', true);
-			$style = apply_filters( 'edd_ap_default_player', 'premium_pixels');
+			$style = apply_filters( 'edd_ap_default_player', 'midnight_black');
 			update_post_meta( $post_id, '_edd_ap_theme', $style );
 		}
 	}
