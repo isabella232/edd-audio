@@ -83,7 +83,8 @@ class FES_Audio_player_Field extends FES_Field {
 		$empty_arr[0]['file'] = '';
 		$empty_arr[0]['name'] = '';
 
-		$files = $post_id != false ? get_post_meta( $post_id, 'edd_preview_files', true ) : $empty_arr;
+		$value = get_post_meta( $post_id, 'edd_preview_files', true );
+		$files = ! empty( $value ) && !empty( $value[0] ) ? $value : $empty_arr;
 		$required = $this->required( $readonly );
 		
 		$output        = '';
