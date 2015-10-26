@@ -126,6 +126,7 @@ class FES_Audio_player_Field extends FES_Field {
 							<?php _e( 'x', 'edd_ap' ); ?></a>
 						</td>
 					</tr>
+				<?php } ?>
 				</tbody>
 				<tfoot>
 					<tr>
