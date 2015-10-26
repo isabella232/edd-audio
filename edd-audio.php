@@ -109,7 +109,6 @@ function edd_ap_metabox() {
 			'midnight_black' => __( 'Midnight Black', 'edd_ap' ),
 			'morning_light'  => __( 'Morning Light', 'edd_ap' ),
 			'blue' => __( 'jPlayer Blue', 'edd_ap' ),
-			'pink' => __( 'jPlayer Pink', 'edd_ap' ),
 			'none' => __( 'None', 'edd_ap' )
 		)
 	);
@@ -249,7 +248,6 @@ function edd_ap_get_theme_css_url( $theme = 'blue' ) {
 
 	$themes = apply_filters( 'edd_ap_theme_urls', array(
 			'blue' => EDD_AP_PLUGIN_URL . 'css/blue.monday/jplayer.blue.monday.css',
-			'pink' => 'http://jplayer.org/latest/skin/pink.flag/jplayer.pink.flag.css',
 			'midnight_black' => EDD_AP_PLUGIN_URL . 'css/midnight.black/jplayer.midnight.black.css',
 			'morning_light' => EDD_AP_PLUGIN_URL . 'css/morning.light/jplayer.morning.light.css',
 			'premium_pixels' => EDD_AP_PLUGIN_URL . 'css/premium-pixels/premium-pixels.css'
