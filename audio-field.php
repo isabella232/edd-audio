@@ -92,7 +92,7 @@ class FES_Audio_player_Field extends FES_Field {
 		$output     .= $this->label( $readonly );
 		ob_start(); ?>
 		<div class="fes-fields">
-			<table class="fes-edd-ap">
+			<table class="multiple">
 				<thead>
 					<tr>
 						<th class="fes-name-column"><?php _e( 'Audio File Name', 'edd_ap' ); ?></th>
@@ -112,28 +112,29 @@ class FES_Audio_player_Field extends FES_Field {
 
 					<tr class="fes-single-variation">
 						<td class="fes-name-row">
-							<input type="text" class="fes-file-name" name="<?php echo $this->name(); ?>[name][<?php echo esc_attr( $index ); ?>]" value="<?php echo esc_attr( $name ); ?>" />
+							<input type="text" class="fes-file-name" name="<?php echo $this->name(); ?>[<?php echo esc_attr( $index ); ?>][name]" value="<?php echo esc_attr( $name ); ?>" />
 						</td>
 						<td class="fes-url-row">
 							<?php printf( '<span class="fes-file-validation" data-required="%s" data-type="file"></span>', $required ); ?>
-							<input type="text" class="fes-file-value" placeholder="<?php _e( "http://", 'edd_ap' ); ?>" name="<?php echo $this->name(); ?>[<?php echo esc_attr( $index ); ?>]" value="<?php echo esc_attr( $url ); ?>" />
+							<input type="text" class="fes-file-value" placeholder="<?php _e( "http://", 'edd_ap' ); ?>" name="<?php echo $this->name(); ?>[<?php echo esc_attr( $index ); ?>][file]" value="<?php echo esc_attr( $url ); ?>" />
 						</td>
 						<td class="fes-url-choose-row" width="1%">
 							<a href="#" class="btn btn-sm btn-default upload_file_button" data-choose="<?php _e( 'Choose file', 'edd_ap' ); ?>" data-update="<?php _e( 'Insert file URL', 'edd_ap' ); ?>">
 							<?php echo str_replace( ' ', '&nbsp;', __( 'Choose file', 'edd_ap' ) ); ?></a>
 						</td>
-						<td width="1%" class="fes-delete-row">
-							<a href="#" class="btn btn-sm btn-danger delete">
-							<?php _e( 'x', 'edd_ap' ); ?></a>
+						<td class="fes-delete-row">
+							<a href="#" class="edd-fes-delete">
+							<?php _e( '&times;', 'edd_ap' ); ?></a>
 						</td>
 					</tr>
 				<?php } ?>
+					<tr class="add_new" style="display:none !important;" id="multiple"></tr>
 				</tbody>
 				<tfoot>
 					<tr>
 						<th colspan="5">
 							<?php if ( ! ( $this->characteristics['single'] === 'yes' ) ) { ?>
-							<a href="#" class="edd-submit button insert-file-row"><?php _e( 'Add File', 'edd_ap' ); ?></a>
+							<a href="#" class="edd-submit button insert-file-row" id="multiple"><?php _e( 'Add File', 'edd_ap' ); ?></a>
 							<?php } ?>
 						</th>
 					</tr>
@@ -180,11 +181,11 @@ class FES_Audio_player_Field extends FES_Field {
 
 		if ( !empty( $values[ $name ] ) ) {
 			foreach ( $values[ $name ] as $file => $url ) {
-				if ( empty( $values[ $file ]['file']  ) ){
+				if ( empty( $values[ $name ][ $file ]['file']  ) ){
 					return __( 'Please enter a valid URL', 'edd_ap' );
 				}
 
-				if ( empty( $values[ $file ]['name']  ) ){
+				if ( empty( $values[ $name ][ $file ]['name']  ) ){
 					return __( 'Please enter a valid name', 'edd_ap' );
 				}
 			}
@@ -199,8 +200,8 @@ class FES_Audio_player_Field extends FES_Field {
 		$name = $this->name();
 		if ( !empty( $values[ $name ] ) ) {
 			foreach ( $values[ $name ] as $file => $url ) {
-				isset( $values[ $file ]['file'] ) ? filter_var( trim( $values[ $file ]['file'] ), FILTER_SANITIZE_URL ) : ''; 
-				isset( $values[ $file ]['name'] ) ? sanitize_text_field( trim( $values[ $file ]['name'] ) ): '';
+				$values[ $file ]['file'] = isset( $values[ $file ]['file'] ) ? filter_var( trim( $values[ $file ]['file'] ), FILTER_SANITIZE_URL ) : ''; 
+				$values[ $file ]['name'] = isset( $values[ $file ]['name'] ) ? sanitize_text_field( trim( $values[ $file ]['name'] ) ): '';
 			}
 		}
 		return apply_filters( 'fes_sanitize_' . $this->template() . '_field', $values, $name, $save_id, $user_id );
@@ -257,14 +258,10 @@ class FES_Audio_player_Field extends FES_Field {
 			$save_id = $this->save_id;
 		}
 
-		$names = isset( $value['name'] ) ? $value['name'] : array();
-		unset( $value['name'] );
 		$pairs = array();
-		$counter = 0;
 		foreach ( $value as $file => $url ) {
-			$pairs[$counter]['file'] = $url;
-			$pairs[$counter]['name'] = isset( $names[$counter] ) ? $names[$counter] : "";
-			$counter++;
+			$pairs[$file]['file'] = isset( $value[$file]['file'] ) ? $value[$file]['file'] : '';
+			$pairs[$file]['name'] = isset( $value[$file]['name'] ) ? $value[$file]['name'] : '';
 		}
 		if ( count( $pairs ) > 0 ) {
 			update_post_meta( $save_id, 'edd_preview_files', $pairs );
