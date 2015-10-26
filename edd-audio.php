@@ -387,7 +387,7 @@ function edd_audio_player_add_fes_functionality(){
 			require_once dirname( __FILE__ ) . '/audio-field.php';
 			add_filter(  'fes_load_fields_array', 'edd_audio_player_add_field', 10, 1 );
 			function edd_audio_player_add_field( $fields ){
-				$fields['edd_audio'] = 'FES_Audio_Player_Field';
+				$fields['audio_player'] = 'FES_Audio_Player_Field';
 				return $fields;
 			}
 		}
