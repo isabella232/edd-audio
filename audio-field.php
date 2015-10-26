@@ -114,7 +114,7 @@ class FES_Audio_player_Field extends FES_Field {
 							<input type="text" class="fes-file-name" name="<?php echo $this->name(); ?>[name][<?php echo esc_attr( $index ); ?>]" value="<?php echo esc_attr( $name ); ?>" />
 						</td>
 						<td class="fes-url-row">
-							<?php printf( '<span class="fes-file-validation" data-required="%s" data-type="file"></span>', $attr['required'] ); ?>
+							<?php printf( '<span class="fes-file-validation" data-required="%s" data-type="file"></span>', $required ); ?>
 							<input type="text" class="fes-file-value" placeholder="<?php _e( "http://", 'edd_ap' ); ?>" name="<?php echo $this->name(); ?>[<?php echo esc_attr( $index ); ?>]" value="<?php echo esc_attr( $url ); ?>" />
 						</td>
 						<td class="fes-url-choose-row" width="1%">
