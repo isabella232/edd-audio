@@ -378,9 +378,7 @@ function edd_ap_update_file_order() {
 }
 add_action( 'wp_ajax_edd_update_audio_files_order', 'edd_ap_update_file_order' );
 
-// Begin FES integration
-// add button to the post button listing
-add_action( 'fes_load_fields_require', 'edd_audio_player_add_fes_functionality' );
+// Register field with FES 2.3+
 function edd_audio_player_add_fes_functionality(){
 	if ( class_exists( 'EDD_Front_End_Submissions' ) ){
 		if ( version_compare( fes_plugin_version, '2.3', '>=' ) ) {
@@ -393,3 +391,4 @@ function edd_audio_player_add_fes_functionality(){
 		}
 	}
 }
+add_action( 'fes_load_fields_require', 'edd_audio_player_add_fes_functionality' );
