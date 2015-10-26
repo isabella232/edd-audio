@@ -13,7 +13,6 @@ if ( !defined( 'EDD_AP_PLUGIN_URL' ) ) {
 	define( 'EDD_AP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
-define( 'EDD_AP_STORE_API_URL', 'http://easydigitaldownloads.com' );
 define( 'EDD_AP_PRODUCT_NAME', 'Audio Player' );
 define( 'EDD_AP_VERSION', '1.4' );
 
