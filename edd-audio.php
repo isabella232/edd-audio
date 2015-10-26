@@ -211,6 +211,10 @@ function edd_ap_scripts( $post_id = null, $override_singular = false ) {
 			$post_id = get_the_ID();
 		}
 
+		if ( ! get_post_meta( $post_id, '_edd_show_audio_player', true ) ) {
+			return;
+		}
+
 		wp_enqueue_script( 'jquery-jplayer', EDD_AP_PLUGIN_URL . 'js/jquery.jplayer.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'jquery-jplayer-playlist', EDD_AP_PLUGIN_URL . 'js/jplayer.playlist.min.js', array( 'jquery' ) );
 
@@ -239,8 +243,9 @@ add_action( 'admin_enqueue_scripts', 'edd_ap_admin_scripts' );
 
 function edd_ap_get_theme_css_url( $theme = 'blue' ) {
 
-	if ( $theme == 'none' )
+	if ( $theme == 'none' || empty( $theme ) ) {
 		return false;
+	}
 
 	$themes = apply_filters( 'edd_ap_theme_urls', array(
 			'blue' => EDD_AP_PLUGIN_URL . 'css/blue.monday/jplayer.blue.monday.css',
