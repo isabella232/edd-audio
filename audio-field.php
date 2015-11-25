@@ -31,7 +31,7 @@ class FES_Audio_player_Field extends FES_Field {
 		'name'        => 'audio_player',
 		'template'    => 'audio_player',
 		'public'      => false,
-		'required'    => true,
+		'required'    => false,
 		'label'       => 'Audio Player',
 		'css'         => '',
 		'default'     => '',
@@ -45,7 +45,7 @@ class FES_Audio_player_Field extends FES_Field {
 	public function set_title() {
 		$title = _x( 'Audio Player', 'FES Field title translation', 'edd_ap' );
 		$title = apply_filters( 'fes_' . $this->name() . '_field_title', $title );
-		$this->supports['title'] = $title;		
+		$this->supports['title'] = $title;
 	}
 
 	public function extending_constructor( ) {
@@ -86,7 +86,7 @@ class FES_Audio_player_Field extends FES_Field {
 		$value = get_post_meta( $post_id, 'edd_preview_files', true );
 		$files = ! empty( $value ) && !empty( $value[0] ) ? $value : $empty_arr;
 		$required = $this->required( $readonly );
-		
+
 		$output        = '';
 		$output     .= sprintf( '<fieldset class="fes-el %1s %2s %3s">', $this->template(), $this->name(), $this->css() );
 		$output     .= $this->label( $readonly );
@@ -178,7 +178,7 @@ class FES_Audio_player_Field extends FES_Field {
 	public function validate( $values = array(), $save_id = -2, $user_id = -2 ) {
 		$name = $this->name();
 		$return_value = false;
-
+		if ( $this->required() )
 		if ( !empty( $values[ $name ] ) ) {
 			foreach ( $values[ $name ] as $file => $url ) {
 				if ( empty( $values[ $name ][ $file ]['file']  ) ){
@@ -200,7 +200,7 @@ class FES_Audio_player_Field extends FES_Field {
 		$name = $this->name();
 		if ( !empty( $values[ $name ] ) ) {
 			foreach ( $values[ $name ] as $file => $url ) {
-				$values[ $file ]['file'] = isset( $values[ $file ]['file'] ) ? filter_var( trim( $values[ $file ]['file'] ), FILTER_SANITIZE_URL ) : ''; 
+				$values[ $file ]['file'] = isset( $values[ $file ]['file'] ) ? filter_var( trim( $values[ $file ]['file'] ), FILTER_SANITIZE_URL ) : '';
 				$values[ $file ]['name'] = isset( $values[ $file ]['name'] ) ? sanitize_text_field( trim( $values[ $file ]['name'] ) ): '';
 			}
 		}
@@ -269,7 +269,7 @@ class FES_Audio_player_Field extends FES_Field {
 			$style = apply_filters( 'edd_ap_default_player', 'midnight_black' );
 			update_post_meta( $save_id, '_edd_ap_theme', $style );
 		}
-	
+
 	}
 
 	/** Gets field value for admin */
