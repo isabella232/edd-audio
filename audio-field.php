@@ -178,21 +178,21 @@ class FES_Audio_player_Field extends FES_Field {
 	public function validate( $values = array(), $save_id = -2, $user_id = -2 ) {
 		$name = $this->name();
 		$return_value = false;
-		if ( $this->required() )
-		if ( !empty( $values[ $name ] ) ) {
-			foreach ( $values[ $name ] as $file => $url ) {
-				if ( empty( $values[ $name ][ $file ]['file']  ) ){
-					return __( 'Please enter a valid URL', 'edd_ap' );
-				}
+		if ( $this->required() ) {
+			if ( !empty( $values[ $name ] ) ) {
+				foreach ( $values[ $name ] as $file => $url ) {
+					if ( empty( $values[ $name ][ $file ]['file']  ) ){
+						return __( 'Please enter a valid URL', 'edd_ap' );
+					}
 
-				if ( empty( $values[ $name ][ $file ]['name']  ) ){
-					return __( 'Please enter a valid name', 'edd_ap' );
+					if ( empty( $values[ $name ][ $file ]['name']  ) ){
+						return __( 'Please enter a valid name', 'edd_ap' );
+					}
 				}
+			} else {
+				$return_value = __( 'Please fill out this field.', 'edd_ap' );
 			}
-		} else {
-			$return_value = __( 'Please fill out this field.', 'edd_ap' );
 		}
-
 		return apply_filters( 'fes_validate_' . $this->template() . '_field', $return_value, $values, $name, $save_id, $user_id );
 	}
 
