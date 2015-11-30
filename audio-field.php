@@ -31,7 +31,7 @@ class FES_Audio_player_Field extends FES_Field {
 		'name'        => 'audio_player',
 		'template'    => 'audio_player',
 		'public'      => false,
-		'required'    => false,
+		'required'    => true,
 		'label'       => 'Audio Player',
 		'css'         => '',
 		'default'     => '',
