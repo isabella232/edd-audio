@@ -119,7 +119,7 @@ class FES_Audio_player_Field extends FES_Field {
 							<input type="text" class="fes-file-value" placeholder="<?php _e( "http://", 'edd_ap' ); ?>" name="<?php echo $this->name(); ?>[<?php echo esc_attr( $index ); ?>][file]" value="<?php echo esc_attr( $url ); ?>" />
 						</td>
 						<td class="fes-url-choose-row" width="1%">
-							<a href="#" class="btn btn-sm btn-default upload_file_button" data-choose="<?php _e( 'Choose file', 'edd_ap' ); ?>" data-update="<?php _e( 'Insert file URL', 'edd_ap' ); ?>">
+							<a href="#" class="edd-submit button upload_file_button" data-choose="<?php _e( 'Choose file', 'edd_ap' ); ?>" data-update="<?php _e( 'Insert file URL', 'edd_ap' ); ?>">
 							<?php echo str_replace( ' ', '&nbsp;', __( 'Choose file', 'edd_ap' ) ); ?></a>
 						</td>
 						<td class="fes-delete-row">
