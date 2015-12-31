@@ -209,7 +209,7 @@ function edd_ap_scripts( $post_id = null, $override_singular = false ) {
 			$post_id = get_the_ID();
 		}
 
-		if ( ! get_post_meta( $post_id, '_edd_show_audio_player', true ) ) {
+		if ( ! get_post_meta( $post_id, '_edd_show_audio_player', true ) && ! has_shortcode( $post->post_content, 'edd_audio' ) ) {
 			return;
 		}
 
