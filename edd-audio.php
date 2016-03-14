@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Easy Digital Downloads - Audio Player
-Plugin URI: http://easydigitaldownloads.com/extension/audio-player
+Plugin URI: https://easydigitaldownloads.com/downloads/audio-player/
 Description: Adds an audio player for previewing music tracks to your download details page
-Author: Pippin Williamson
-Author URI: http://pippinsplugins.com
-Version: 1.4
+Author: Easy Digital Downloads
+Author URI: https://easydigitaldownloads.com/
+Version: 1.4.1
 */
 
 // plugin folder url
@@ -14,7 +14,7 @@ if ( !defined( 'EDD_AP_PLUGIN_URL' ) ) {
 }
 
 define( 'EDD_AP_PRODUCT_NAME', 'Audio Player' );
-define( 'EDD_AP_VERSION', '1.4' );
+define( 'EDD_AP_VERSION', '1.4.1' );
 
 if ( class_exists( 'EDD_License' ) ) {
 	$edd_ap_license = new EDD_License( __FILE__, EDD_AP_PRODUCT_NAME, EDD_AP_VERSION, 'Pippin Williamson', 'edd_ap_license_key' );
