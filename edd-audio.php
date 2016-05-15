@@ -132,7 +132,7 @@ function edd_ap_metabox() {
 	echo '<th style="width: 2%;"></th>';
 	echo '</tr>';
 	echo '</thead>';
-	if ( is_array( $files ) ) {
+	if ( is_array( $files ) && ! empty( $files) ) {
 		foreach ( $files as $key => $value ) {
 			echo '<tr class="edd_repeatable_upload_wrapper edd_repeatable_row" data-key="' . esc_attr( $key ) . '">';
 			$name = isset( $files[$key]['name'] ) ? $files[$key]['name'] : '';
