@@ -56,7 +56,7 @@ function edd_ap_sanitize_file_save( $files ) {
 add_filter( 'edd_metabox_save_edd_preview_files', 'edd_ap_sanitize_file_save' );
 
 function edd_ap_register_metabox() {
-	add_meta_box( 'edd_product_notes', __( ' Audio Player', 'edd_ap' ), 'edd_ap_metabox', 'download', 'normal', 'high' );
+	add_meta_box( 'edd_audio_player', __( ' Audio Player', 'edd_ap' ), 'edd_ap_metabox', 'download', 'normal', 'high' );
 }
 add_action( 'add_meta_boxes', 'edd_ap_register_metabox' );
 
