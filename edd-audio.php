@@ -90,8 +90,8 @@ function edd_ap_metabox() {
 	echo '<p id="edd_ap_placement" ' . $style . '>';
 	echo '<select name="_edd_ap_placement" id="_edd_ap_placement">';
 	$placements = array( 'top' => __( 'Top', 'edd_ap' ), 'bottom' => __( 'Bottom', 'edd_ap' ) );
-	foreach ( $placements as $key => $placement ) {
-		echo '<option value="' . $key . '" ' . selected( $key, $placement, false ) . '>' . $placement . '</option>';
+	foreach ( $placements as $key => $value ) {
+		echo '<option value="' . $key . '" ' . selected( $key, $placement, false ) . '>' . $value . '</option>';
 	}
 	echo '</select>&nbsp;';
 	echo '<label for="_edd_ap_placement">' . __( 'Place the audio player above or below the download content?', 'edd_ap' ) . '</label>';
